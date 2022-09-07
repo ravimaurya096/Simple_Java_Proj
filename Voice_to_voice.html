@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    /> -->
+    <link rel="stylesheet" href="./st2.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  </head>
+    <title>Speech To Text</title>
+    <style>
+      *{
+        
+        
+        /* background-color: rgb(255, 255, 255); */
+        color: rgb(0, 0, 0);
+
+      }
+      #input1{
+        width: 65vw;
+        display: flex;
+        align-items: center;
+        margin-left: 20vw;
+        border: 4px solid white;
+        border-radius: 1rem;
+      }
+      body{
+        background-image: url('https://th.bing.com/th/id/OIP.yQMq7gUxV8p0-EKPiFGihQHaD_?w=319&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7');
+        background-repeat: no-repeat;
+        background-size:contain;
+      }
+      </style>
+  </head>
+  <body>
+
+    <br>
+    <br>
+    <div class="row" >
+      <div class="col-sm-6">
+        <div class="container" style="color:white; margin-left: 20vw;"> <b style="color:white">Select Source Language:</b> 
+          <select name="lang" id="lang"  onclick="langSelect()">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="gu">Gujrati</option>
+            <option value="ta">Tamil</option>
+            <option value="fr">French</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="container" > <b style="color:white; margin-left: 5vw;">Select Target Language</b> 
+            <select id="select2" >
+              <option value="en-GB">English</option>
+              <option value="hi-IN">Hindi</option>
+              <option value="gu-IN">Gujrati</option>
+              <option value="bn-In">Bengali</option>
+              <option value="ta-UL">Tamil</option>
+              <option value="fr-FR">French</option>
+            </select>
+        </div>
+      </div>
+    </div>
+    
+  
+  <form>
+    <br>
+  <br>
+    <div style="margin-left: 35vw ;" class="container"> <h1 style="color:white">Speech To Speech Translator</h1> </div>
+    <textarea style="color: white; opacity: 0;" id="input1" rows="8"  cols="50"></textarea>
+    <br>
+    <div class="container" style="margin-left: 20vw ;">
+      <button type="submit"><img style="max-height: 32vh; max-width:30vw;" src="https://th.bing.com/th/id/OIP.iTMq36objN3fIJ6LaE6iDwHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt=""></button>
+    <button style="max-height: 32vh; max-width:30vw; margin-left: 40vh;" type="button" id="convert"><img src="https://th.bing.com/th/id/OIP.iTMq36objN3fIJ6LaE6iDwHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt=""></button>
+    </div>
+</form>
+<br>
+<script>
+    let form = document.querySelector("form");
+    let sr = window.webkitSpeechRecognition || window.SpeechRecognition;
+    let spRec = new sr();
+    let stopped = false;
+    function langSelect(){
+      spRec.lang = lang.value;
+    }
+    
+    spRec.continuous = true;
+    spRec.interimResults = true;
+    // console.log(spRec);
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+        spRec.start();
+    })
+    spRec.onresult = res => {
+        let text = Array.from(res.results)
+            .map(r => r[0])
+            .map(txt => txt.transcript)
+            .join("");
+        form[0].value = text;
+        // console.log(text);
+    }
+    form[2].addEventListener("click", () => {
+      stopped = true;
+      clear1()
+        spRec.stop()
+        
+    })
+    
+    
+</script>
+
+<br>
+<br>
+
+    <div class="container" style="color:white; max-width:70vw">
+      <div class="wrapper">
+        <div class="text-input">
+          <textarea id="input2" rows="8" cols="50" spellcheck="false" style=" opacity: 0;" class="from-text" placeholder="Enter text"></textarea>
+          <textarea spellcheck="false" rows="8" cols="50" readonly disabled class="to-text" style="opacity: 0;" placeholder="Translation"></textarea>
+        </div>
+        <ul class="controls">
+          <li class="row from">
+            <select id="select1" style="opacity: 0;">
+              <option value="en-GB">English</option>
+              <option value="hi-IN">Hindi</option>
+              <option value="gu-IN">Gujrati</option>
+              <option value="bn-In">Bengali</option>
+              <option value="ta-UL">Tamil</option>
+              <option value="fr-FR">French</option>
+
+            </select>
+          </li>
+          <li class="row to">
+            <select id="select2" style="opacity: 0;">
+              <option value="en-GB">English</option>
+              <option value="hi-IN">Hindi</option>
+              <option value="gu-IN">Gujrati</option>
+              <option value="bn-In">Bengali</option>
+              <option value="ta-UL">Tamil</option>
+              <option value="fr-FR">French</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+      <button id="btn" style="opacity: 0;">Translate Text</button>
+    </div>
+
+    </div>
+
+    <script>
+      clickedClear = false;
+      function clear1(){
+      let input1 = document.getElementById("input1");
+      let input2 = document.getElementById("input2");
+      input2.value = input1.value;
+      clickedClear = true;
+    }
+      const countries = {
+    "am-ET": "Amharic",
+    "ar-SA": "Arabic",
+    "be-BY": "Bielarus",
+    "bem-ZM": "Bemba",
+    "bi-VU": "Bislama",
+    "bjs-BB": "Bajan",
+    "bn-IN": "Bengali",
+    "bo-CN": "Tibetan",
+    "br-FR": "Breton",
+    "bs-BA": "Bosnian",
+    "ca-ES": "Catalan",
+    "cop-EG": "Coptic",
+    "cs-CZ": "Czech",
+    "cy-GB": "Welsh",
+    "da-DK": "Danish",
+    "dz-BT": "Dzongkha",
+    "de-DE": "German",
+    "dv-MV": "Maldivian",
+    "el-GR": "Greek",
+    "en-GB": "English",
+    "es-ES": "Spanish",
+    "et-EE": "Estonian",
+    "eu-ES": "Basque",
+    "fa-IR": "Persian",
+    "fi-FI": "Finnish",
+    "fn-FNG": "Fanagalo",
+    "fo-FO": "Faroese",
+    "fr-FR": "French",
+    "gl-ES": "Galician",
+    "gu-IN": "Gujarati",
+    "ha-NE": "Hausa",
+    "he-IL": "Hebrew",
+    "hi-IN": "Hindi",
+    "hr-HR": "Croatian",
+    "hu-HU": "Hungarian",
+    "id-ID": "Indonesian",
+    "is-IS": "Icelandic",
+    "it-IT": "Italian",
+    "ja-JP": "Japanese",
+    "kk-KZ": "Kazakh",
+    "km-KM": "Khmer",
+    "kn-IN": "Kannada",
+    "ko-KR": "Korean",
+    "ku-TR": "Kurdish",
+    "ky-KG": "Kyrgyz",
+    "la-VA": "Latin",
+    "lo-LA": "Lao",
+    "lv-LV": "Latvian",
+    "men-SL": "Mende",
+    "mg-MG": "Malagasy",
+    "mi-NZ": "Maori",
+    "ms-MY": "Malay",
+    "mt-MT": "Maltese",
+    "my-MM": "Burmese",
+    "ne-NP": "Nepali",
+    "niu-NU": "Niuean",
+    "nl-NL": "Dutch",
+    "no-NO": "Norwegian",
+    "ny-MW": "Nyanja",
+    "ur-PK": "Pakistani",
+    "pau-PW": "Palauan",
+    "pa-IN": "Panjabi",
+    "ps-PK": "Pashto",
+    "pis-SB": "Pijin",
+    "pl-PL": "Polish",
+    "pt-PT": "Portuguese",
+    "rn-BI": "Kirundi",
+    "ro-RO": "Romanian",
+    "ru-RU": "Russian",
+    "sg-CF": "Sango",
+    "si-LK": "Sinhala",
+    "sk-SK": "Slovak",
+    "sm-WS": "Samoan",
+    "sn-ZW": "Shona",
+    "so-SO": "Somali",
+    "sq-AL": "Albanian",
+    "sr-RS": "Serbian",
+    "sv-SE": "Swedish",
+    "sw-SZ": "Swahili",
+    "ta-LK": "Tamil",
+    "te-IN": "Telugu",
+    "tet-TL": "Tetum",
+    "tg-TJ": "Tajik",
+    "th-TH": "Thai",
+    "ti-TI": "Tigrinya",
+    "tk-TM": "Turkmen",
+    "tl-PH": "Tagalog",
+    "tn-BW": "Tswana",
+    "to-TO": "Tongan",
+    "tr-TR": "Turkish",
+    "uk-UA": "Ukrainian",
+    "uz-UZ": "Uzbek",
+    "vi-VN": "Vietnamese",
+    "wo-SN": "Wolof",
+    "xh-ZA": "Xhosa",
+    "yi-YD": "Yiddish",
+    "zu-ZA": "Zulu"
+}
+
+const fromText = document.querySelector(".from-text"),
+toText = document.querySelector(".to-text"),
+translateBtn = document.getElementById("btn"),
+select1 = document.getElementById("lang");
+select2 = document.getElementById("select2");
+icon = document.getElementById("icon");
+convert = document.getElementById("convert");
+
+fromText.addEventListener("keyup", () => {
+    if(!fromText.value) {
+        toText.value = "";
+    }
+});
+function speak(){
+
+}
+convert.addEventListener("click", ({target}) => {
+  let text = fromText.value.trim();
+    translateFrom = select1.value;
+    translateTo = select2.value;
+    if(!text) return;
+    toText.setAttribute("placeholder", "Translating...");
+    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
+    fetch(apiUrl).then(res => res.json()).then(data => {
+        toText.value = data.responseData.translatedText;
+        data.matches.forEach(data => {
+            if(data.id === 0) {
+                toText.value = data.translation;
+            }
+        });
+        toText.setAttribute("placeholder", "Translation");
+    });
+        if(!fromText.value || !toText.value) return;
+        if(target.classList.contains("fa-copy")) {
+            if(target.id == "from") {
+                navigator.clipboard.writeText(fromText.value);
+            } else {
+                navigator.clipboard.writeText(toText.value);
+            }
+        } else {
+            let utterance;
+            if(target.id == "from") {
+                utterance = new SpeechSynthesisUtterance(fromText.value);
+                utterance.lang = select1.value;
+            } else {
+                utterance = new SpeechSynthesisUtterance(toText.value);
+                utterance.lang = select2.value;
+            }
+            speechSynthesis.speak(utterance);
+        }
+    });
+// translateBtn.addEventListener("click", () => {
+    
+    
+// });
+
+
+
+    </script>
+    
+
+    <br>
+    <br>
+</body>
+</html>
